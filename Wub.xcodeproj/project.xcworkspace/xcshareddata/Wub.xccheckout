@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>9E6942EA-6902-4399-BBCA-F00117691A80</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Wub</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>AF7835C924602D4C1A9E9F1975BC1B83C8B57570</key>
+		<string>https://github.com/Marini83/Wub.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Wub.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>AF7835C924602D4C1A9E9F1975BC1B83C8B57570</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>https://github.com/Marini83/Wub.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>AF7835C924602D4C1A9E9F1975BC1B83C8B57570</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>AF7835C924602D4C1A9E9F1975BC1B83C8B57570</string>
+			<key>IDESourceControlWCCName</key>
+			<string>Wub</string>
+		</dict>
+	</array>
+</dict>
+</plist>
