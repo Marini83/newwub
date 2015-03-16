@@ -10,11 +10,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Wub/FilterViewController.swift"
-            timestampString = "445146130.458477"
+            timestampString = "446061067.867956"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "175"
-            endingLineNumber = "175"
+            startingLineNumber = "242"
+            endingLineNumber = "242"
             landmarkName = "FilterViewController"
             landmarkType = "3">
          </BreakpointContent>
@@ -26,11 +26,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Wub/FilterViewController.swift"
-            timestampString = "445146130.458477"
+            timestampString = "446061067.867956"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "120"
-            endingLineNumber = "120"
+            startingLineNumber = "114"
+            endingLineNumber = "114"
             landmarkName = "photoFilters()"
             landmarkType = "5">
          </BreakpointContent>
@@ -42,11 +42,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "FeedViewController.swift"
-            timestampString = "445640092.355556"
+            timestampString = "446062076.615565"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "107"
-            endingLineNumber = "107"
+            startingLineNumber = "135"
+            endingLineNumber = "135"
             landmarkName = "imagePickerController(_:didFinishPickingMediaWithInfo:)"
             landmarkType = "5">
          </BreakpointContent>
@@ -57,14 +57,14 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Wub/ProfileViewController.swift"
-            timestampString = "445642885.045675"
+            filePath = "Wub/FilterViewController.swift"
+            timestampString = "446061067.867956"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "37"
-            endingLineNumber = "37"
-            landmarkName = "ProfileViewController"
-            landmarkType = "3">
+            startingLineNumber = "185"
+            endingLineNumber = "185"
+            landmarkName = "shareToFacebook(_:)"
+            landmarkType = "5">
          </BreakpointContent>
       </BreakpointProxy>
    </Breakpoints>

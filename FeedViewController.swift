@@ -9,22 +9,47 @@
 import UIKit
 import MobileCoreServices
 import CoreData
+import MapKit
 
-class FeedViewController: UIViewController, UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate{
+
+class FeedViewController: UIViewController, UICollectionViewDataSource,UICollectionViewDelegate,UIImagePickerControllerDelegate,UINavigationControllerDelegate, CLLocationManagerDelegate {
 
     @IBOutlet weak var collectionView: UICollectionView!
     
     var feedArray: [AnyObject] = []
+    var locationManager: CLLocationManager!
+    
     
     override func viewDidLoad() {
-        let request = NSFetchRequest(entityName: "FeedItem")
-        let appDelegate:AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
-        let context:NSManagedObjectContext = appDelegate.managedObjectContext!
-        feedArray = context.executeFetchRequest(request, error: nil)!
-        super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+         super.viewDidLoad()
+        // collectionview background image
+        
+//        let request = NSFetchRequest(entityName: "FeedItem")
+//        let appDelegate:AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+//        let context:NSManagedObjectContext = appDelegate.managedObjectContext!
+//        feedArray = context.executeFetchRequest(request, error: nil)!
+       
+        
+        let backgroundImage = UIImage(named: "AutumnBackground")
+        self.view.backgroundColor = UIColor(patternImage: backgroundImage!)
+        
+        locationManager = CLLocationManager()
+        locationManager.delegate = self
+        locationManager.desiredAccuracy = kCLLocationAccuracyBest // most precise possible location
+        locationManager.requestAlwaysAuthorization()
+        
+        locationManager.distanceFilter = 100.0 // in meters (min distance before an update event is generated)
+        locationManager.startUpdatingLocation()//        let doubleTapRecognizer = UITapGestureRecognizer(target: self, action: "onScrollViewDoubleTapped:");
+//        doubleTapRecognizer.numberOfTapsRequired = 1;
+//        doubleTapRecognizer.numberOfTouchesRequired = 1;
+//        collectionView.addGestureRecognizer(doubleTapRecognizer);
     }
+    
+    
+//    func onScrollViewDoubleTapped(recognizer:UITapGestureRecognizer)
+//    {
+//        println("double tapped")
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -33,7 +58,7 @@ class FeedViewController: UIViewController, UICollectionViewDataSource,UICollect
     
     override func viewDidAppear(animated: Bool) {
         let request = NSFetchRequest(entityName: "FeedItem")
-        let appDelegate:AppDelegate = (UIApplication.sharedApplication().delegate as! AppDelegate)
+        let appDelegate:AppDelegate = (UIApplication.sharedApplication().delegate as AppDelegate)
         let context:NSManagedObjectContext = appDelegate.managedObjectContext!
         feedArray = context.executeFetchRequest(request, error: nil)!
         collectionView.reloadData()
@@ -48,10 +73,11 @@ class FeedViewController: UIViewController, UICollectionViewDataSource,UICollect
     }
     */
     
-    
     @IBAction func profileTapped(sender: UIBarButtonItem) {
-         self.performSegueWithIdentifier("profileSegue", sender: nil)
+        self.performSegueWithIdentifier("profileSegue", sender: nil)
     }
+    
+   
     
     @IBAction func snapBarButtonItemTapped(sender: AnyObject) {
         if UIImagePickerController.isSourceTypeAvailable(UIImagePickerControllerSourceType.Camera){
@@ -91,22 +117,37 @@ class FeedViewController: UIViewController, UICollectionViewDataSource,UICollect
     //UIImagePickerControllerDelegate
     
      func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
-        let image = info[UIImagePickerControllerOriginalImage] as! UIImage
+        let image = info[UIImagePickerControllerOriginalImage] as UIImage
         //normal image
         let imageData = UIImageJPEGRepresentation(image, 1.0)
         //compressed
         let thumbNailData = UIImageJPEGRepresentation(image, 0.1)
         
-        let managedObjectContext = (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext
+        let managedObjectContext = (UIApplication.sharedApplication().delegate as AppDelegate).managedObjectContext
         let entityDescription = NSEntityDescription.entityForName("FeedItem", inManagedObjectContext: managedObjectContext!)
         let feedItem = FeedItem(entity: entityDescription!, insertIntoManagedObjectContext: managedObjectContext!)
         
         feedItem.image = imageData
         feedItem.caption = "\(getCurrentTimeStamp())"
        feedItem.cdate = getCurrentTimeStamp()
+        
+        
         //println(feedItem.cdate)
         feedItem.thumbNail = thumbNailData
-        (UIApplication.sharedApplication().delegate as! AppDelegate).saveContext()
+        if locationManager.location != nil {
+        feedItem.latitude = locationManager.location.coordinate.latitude
+        feedItem.longitude = locationManager.location.coordinate.longitude
+        }
+        else {
+            println("No location available")
+        }
+        //generate unique ID for the images stored in the CoreData
+        let UUID = NSUUID().UUIDString
+        feedItem.uniqueID = UUID
+        
+        feedItem.filtered = false
+        
+        (UIApplication.sharedApplication().delegate as AppDelegate).saveContext()
         
         feedArray.append(feedItem)
         
@@ -135,29 +176,45 @@ class FeedViewController: UIViewController, UICollectionViewDataSource,UICollect
     override func supportedInterfaceOrientations() -> Int {
         return UIInterfaceOrientation.Portrait.rawValue
     }
+    
     func collectionView(collectionView: UICollectionView, cellForItemAtIndexPath indexPath: NSIndexPath) -> UICollectionViewCell {
         
-        var cell:FeedCell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as! FeedCell
+        var cell:FeedCell = collectionView.dequeueReusableCellWithReuseIdentifier("Cell", forIndexPath: indexPath) as FeedCell
         
-        let thisItem = feedArray[indexPath.item] as! FeedItem
+        let thisItem = feedArray[indexPath.item] as FeedItem
         
-        cell.imageView.image = UIImage(data: thisItem.image)
+        if thisItem.filtered == true {
+            let returnedImage = UIImage(data: thisItem.image)
+            let rotatedImage = UIImage(CGImage: returnedImage?.CGImage, scale: 1.0, orientation: UIImageOrientation.Right)
+            cell.imageView.image = rotatedImage
+
+        }
+        else {
+            cell.imageView.image = UIImage(data: thisItem.image)
+        }
+        
         cell.captionLabel.text = thisItem.caption
         
         return cell
     }
     
-    //UICOllectionViewDelegate
+    //MARK: UICOllectionViewDelegate
     
-    func collectionView(collectionView: UICollectionView, didDeselectItemAtIndexPath indexPath: NSIndexPath) {
-        let thisItem = feedArray[indexPath.row] as! FeedItem
+    func collectionView(collectionView: UICollectionView, didSelectItemAtIndexPath indexPath: NSIndexPath) {
+        let thisItem = feedArray[indexPath.row] as FeedItem
         
         var filterVC = FilterViewController()
         filterVC.thisFeedItem = thisItem
         self.navigationController?.pushViewController(filterVC, animated: false)
     }
     
-    /// helper 
+    //MARK: CLLocationManagerDelegate
+    
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+        println("locations = \(locations)")
+    }
+    
+    //MARK: Helper Functions
     
     func getCurrentTime() -> String {
         

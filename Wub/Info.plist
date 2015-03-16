@@ -30,10 +30,6 @@
 	<array>
 		<string>armv7</string>
 	</array>
-	<key>UISupportedInterfaceOrientations</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
 	<key>FacebookAppID</key>
 	<string>632818013531181</string>
 	<key>FacebookDisplayName</key>
@@ -49,9 +45,9 @@
 			</array>
 		</dict>
 	</array>
-	<key>UISupportedInterfaceOrientations~ipad</key>
-	<array>
-		<string>UIInterfaceOrientationPortrait</string>
-	</array>
+	<key>NSLocationUsageDescription</key>
+	<string>Wub would like to use your location</string>
+	<key>NSLocationWhenInUsageDescription</key>
+	<string>Wub would like to use your location</string>
 </dict>
 </plist>

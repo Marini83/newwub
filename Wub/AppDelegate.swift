@@ -18,7 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         
-        let cache = NSURLCache(memoryCapacity: 16 * 1024 * 1024, diskCapacity: 8 * 1024 * 1024 , diskPath:nil)
+        // this cache is not used anywhere else in our app...
+        let cache = NSURLCache(memoryCapacity: 8 * 1024 * 1024, diskCapacity: 20 * 1024 * 1024, diskPath: nil)
         
         NSURLCache.setSharedURLCache(cache)
         
@@ -27,17 +28,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         return true
     }
-
+    
     func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject?) -> Bool {
+        
+        // this allows the application to open up again after the user has validated the login credentials
         var wasHandled:Bool = FBAppCall.handleOpenURL(url, sourceApplication: sourceApplication)
         
         return wasHandled
     }
     
-    func applicationDidReceiveMemoryWarning(application: UIApplication){
-        
-    NSURLCache.sharedURLCache().removeAllCachedResponses()
-        
+    func applicationDidReceiveMemoryWarning(application: UIApplication) {
+        // when we receive a memory warning it will go and purge the shared cache
+        NSURLCache.sharedURLCache().removeAllCachedResponses() // not working as of Xcode 6.1
     }
     
     func applicationWillResignActive(application: UIApplication) {
@@ -69,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "com.wub.Wub" in the application's documents Application Support directory.
         let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
-        return urls[urls.count-1] as! NSURL
+        return urls[urls.count-1] as NSURL
     }()
 
     lazy var managedObjectModel: NSManagedObjectModel = {
